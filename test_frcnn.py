@@ -92,7 +92,7 @@ class Box:
         self.prob = prob
 
 class FRCNNTester:
-    def __init__(self, config_output_filename, num_rois):
+    def __init__(self, config_output_filename, num_rois, bbox_threshold = 0.8):
         with open(config_output_filename, 'rb') as f_in:
             C = pickle.load(f_in)
 
@@ -156,7 +156,7 @@ class FRCNNTester:
         self.model_rpn.compile(optimizer='sgd', loss='mse')
         self.model_classifier.compile(optimizer='sgd', loss='mse')
 
-        self.bbox_threshold = 0.8
+        self.bbox_threshold = bbox_threshold
 
     def predict(self, img):
 
