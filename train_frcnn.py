@@ -147,7 +147,7 @@ model_rpn.compile(optimizer=optimizer, loss=[losses.rpn_loss_cls(num_anchors), l
 model_classifier.compile(optimizer=optimizer_classifier, loss=[losses.class_loss_cls, losses.class_loss_regr(len(classes_count)-1)], metrics={'dense_class_{}'.format(len(classes_count)): 'accuracy'})
 model_all.compile(optimizer='sgd', loss='mae')
 
-class FRCNN:
+class FRCNNTrainer:
     def __init__(self, num_epochs, epoch_length, class_mapping, data_gen_train, data_gen_val, model_rpn, model_classifier, model_all):
         self.num_epochs = num_epochs
         self.epoch_length = epoch_length
@@ -303,14 +303,14 @@ epoch_length = 1000
 num_epochs = int(options.num_epochs)
 iter_num = 0
 
-frcnn = FRCNN(num_epochs,
-              epoch_length,
-              class_mapping,
-              data_gen_train=data_gen_train,
-              data_gen_val=data_gen_val,
-              model_rpn=model_rpn,
-              model_classifier=model_classifier,
-              model_all=model_all)
+frcnn = FRCNNTrainer(num_epochs,
+                     epoch_length,
+                     class_mapping,
+                     data_gen_train=data_gen_train,
+                     data_gen_val=data_gen_val,
+                     model_rpn=model_rpn,
+                     model_classifier=model_classifier,
+                     model_all=model_all)
 
 frcnn.train()
 

@@ -34,7 +34,7 @@ def main():
 
     img_path = options.test_path
 
-    model = TestFRCNN(config_output_filename, int(options.num_rois))
+    model = FRCNNTester(config_output_filename, int(options.num_rois))
 
     test_folder(img_path, model)
 
@@ -91,7 +91,7 @@ class Box:
         self.y2 = y2
         self.prob = prob
 
-class TestFRCNN:
+class FRCNNTester:
     def __init__(self, config_output_filename, num_rois):
         with open(config_output_filename, 'rb') as f_in:
             C = pickle.load(f_in)
