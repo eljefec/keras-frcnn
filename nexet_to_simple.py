@@ -28,9 +28,9 @@ def nexet_to_simple(train_boxes_csv, train_folder, simple_filename):
                     print('warning non-existent file:', fullpath, 'line:', line)
 
 def convert():
-    nexet_to_simple('/home/eljefec/data/nexet/train_boxes.csv',
+    nexet_to_simple('/home/eljefec/data/nexet/train_boxes_60c87b87.csv',
                     '/home/eljefec/data/nexet/train',
-                    '/home/eljefec/data/nexet/train_boxes.simple.csv')
+                    '/home/eljefec/data/nexet/train_boxes_60c87b87.simple.csv')
 
 if __name__ == '__main__':
     convert()
