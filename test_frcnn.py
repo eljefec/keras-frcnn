@@ -92,7 +92,7 @@ class Box:
         self.prob = prob
 
 class FRCNNTester:
-    def __init__(self, config_output_filename, num_rois, bbox_threshold = 0.8):
+    def __init__(self, config_output_filename, num_rois):
         with open(config_output_filename, 'rb') as f_in:
             C = pickle.load(f_in)
 
@@ -156,9 +156,7 @@ class FRCNNTester:
         self.model_rpn.compile(optimizer='sgd', loss='mse')
         self.model_classifier.compile(optimizer='sgd', loss='mse')
 
-        self.bbox_threshold = bbox_threshold
-
-    def predict(self, img):
+    def predict(self, img, bbox_threshold):
 
         X, ratio = format_img(img, self.C)
 
@@ -197,7 +195,7 @@ class FRCNNTester:
 
             for ii in range(P_cls.shape[1]):
 
-                if np.max(P_cls[0, ii, :]) < self.bbox_threshold or np.argmax(P_cls[0, ii, :]) == (P_cls.shape[2] - 1):
+                if np.max(P_cls[0, ii, :]) < bbox_threshold or np.argmax(P_cls[0, ii, :]) == (P_cls.shape[2] - 1):
                     continue
 
                 cls_name = self.class_mapping[np.argmax(P_cls[0, ii, :])]
@@ -237,6 +235,10 @@ class FRCNNTester:
         return pred_boxes
 
 def test_folder(img_path, model):
+    result_folder = './result_imgs/'
+    if not os.path.exists(result_folder):
+        os.makedirs(result_folder)
+
     for idx, img_name in enumerate(sorted(os.listdir(img_path))):
         if not img_name.lower().endswith(('.bmp', '.jpeg', '.jpg', '.png', '.tif', '.tiff')):
             continue
