@@ -82,6 +82,14 @@ def get_real_coordinates(ratio, x1, y1, x2, y2):
 
     return (real_x1, real_y1, real_x2 ,real_y2)
 
+def clip_coordinates(img, x1, y1, x2, y2):
+    clip_x1 = min(img.shape[1], max(0, x1))
+    clip_x2 = min(img.shape[1], max(0, x2))
+    clip_y1 = min(img.shape[0], max(0, y1))
+    clip_y2 = min(img.shape[0], max(0, y2))
+
+    return (clip_x1, clip_y1, clip_x2 ,clip_y2)
+
 class Box:
     def __init__(self, class_name, x1, y1, x2, y2, prob):
         self.class_name = class_name
@@ -230,7 +238,9 @@ class FRCNNTester:
 
                 (real_x1, real_y1, real_x2, real_y2) = get_real_coordinates(ratio, x1, y1, x2, y2)
 
-                pred_boxes.append(Box(key, real_x1, real_y1, real_x2, real_y2, new_probs[jk]))
+                (clip_x1, clip_y1, clip_x2, clip_y2) = clip_coordinates(img, real_x1, real_y1, real_x2, real_y2)
+
+                pred_boxes.append(Box(key, clip_x1, clip_y1, clip_x2, clip_y2, new_probs[jk]))
 
         return pred_boxes
 
@@ -248,7 +258,7 @@ def test_folder(img_path, model):
 
         img = cv2.imread(filepath)
 
-        pred_boxes = model.predict(img)
+        pred_boxes = model.predict(img, bbox_threshold=0.5)
 
         all_dets = []
 
